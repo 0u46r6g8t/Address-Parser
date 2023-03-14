@@ -1,5 +1,7 @@
 from web.script_parser import Parser
 from flask import Flask
+from gevent.pywsgi import WSGIServer
+
 
 ## Define avariable for the app
 app = Flask(__name__)
@@ -10,6 +12,14 @@ def return_json_message(isError, message, data=None):
         'isError': isError,
         'message': message,
         'data': data
+    }
+
+@app.route('/', methods=['GET'])
+def main():
+    return {
+        'isError': True,
+        'message': 'Use of route /validate/:name',
+        'data': None
     }
 
 @app.route('/validate/<nameOfActivity>', methods=['GET'])
@@ -27,4 +37,9 @@ def index(nameOfActivity):
         return 'Activity not found'
         
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    try:
+        http_server = WSGIServer(('0.0.0.0', 3000), app)
+        http_server.serve_forever()
+    except Exception as e:
+        print('Tchau')
