@@ -39,7 +39,9 @@ def index(nameOfActivity):
 if __name__ == '__main__':
     # app.run(debug=True)
     try:
-        http_server = WSGIServer(('0.0.0.0', 3000), app)
+        http_server = WSGIServer(('0.0.0.0', 3333), app)
         http_server.serve_forever()
     except Exception as e:
-        print('Tchau')
+        print('Error', e)
+    except KeyboardInterrupt:
+        print("Tchau")
